@@ -1,0 +1,64 @@
+.sidebar {
+  .text {
+    color: var(--text-color);
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 100%;
+    opacity: 1;
+    transform: translateX(0);
+    letter-spacing: normal;
+    transition:
+      width 0.5s,
+      opacity 0.5s,
+      transform 0.5s,
+      letter-spacing 0.5s;
+  }
+
+  .icon {
+    color: var(--text-color);
+    transition: var(--tran-03);
+  }
+
+  .menu-bar {
+    li {
+      margin-top: 0.7rem;
+      display: flex;
+      align-items: center;
+      transition: var(--tran-05);
+      cursor: pointer;
+
+      a {
+        width: 100%;
+        padding: 0.7rem 1.2rem;
+        display: flex;
+        align-items: center;
+      }
+
+      .menu-game-icon,
+      .icon {
+        font-size: 2.2rem;
+        margin-right: 1.3rem;
+        display: flex;
+      }
+
+      &:not(.mode):hover {
+        background: var(--primary-color);
+
+        .text,
+        .icon {
+          color: var(--menu-text-color);
+        }
+      }
+    }
+  }
+
+  // &.close {
+  //   .text {
+  //     width: 0;
+  //     opacity: 0;
+  //     transform: translateX(-20px);
+  //     letter-spacing: -0.1em;
+  //   }
+  // }
+}

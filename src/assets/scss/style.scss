@@ -1,0 +1,66 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+@import './variables';
+@import './sidebar.scss';
+
+* {
+  font-family: 'Poppins', sans-serif;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --body-color: #e4e9f7;
+  --sidebar-color: #fff;
+  --primary-color: #695cfe;
+  --primary-color-light: #f6f5ff;
+  --secondary-color: #8c82fe;
+  --toggle-color: #ddd;
+  --text-color: #707070;
+  --menu-text-color: #fff;
+  --card-front-color: #3a4662;
+  --card-back-color: #ff6f61;
+  --bank-text-color: #e1ae0f;
+
+  --tran-02: all 0.2s ease;
+  --tran-03: all 0.3s ease;
+  --tran-04: all 0.4s ease;
+  --tran-05: all 0.5s ease;
+}
+
+html {
+  font-size: 16px;
+}
+
+body {
+  background: var(--body-color);
+  transition: var(--tran-04);
+}
+
+body.dark {
+  --body-color: #18191a;
+  --sidebar-color: #333536;
+  --primary-color: #8c82fe;
+  --primary-color-light: #3a3b3c;
+  --toggle-color: #fff;
+  --text-color: #ccc;
+}
+
+a {
+  text-decoration: none;
+}
+
+button {
+  cursor: pointer;
+  border: 0;
+}
+
+li {
+  list-style: none;
+}
+
+@each $color, $value in $colors {
+  .text-#{$color} {
+    color: $value;
+  }
+}
