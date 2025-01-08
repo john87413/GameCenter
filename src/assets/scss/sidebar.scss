@@ -4,15 +4,6 @@
     font-weight: 500;
     white-space: nowrap;
     overflow: hidden;
-    width: 100%;
-    opacity: 1;
-    transform: translateX(0);
-    letter-spacing: normal;
-    transition:
-      width 0.5s,
-      opacity 0.5s,
-      transform 0.5s,
-      letter-spacing 0.5s;
   }
 
   .icon {
@@ -52,13 +43,4 @@
       }
     }
   }
-
-  // &.close {
-  //   .text {
-  //     width: 0;
-  //     opacity: 0;
-  //     transform: translateX(-20px);
-  //     letter-spacing: -0.1em;
-  //   }
-  // }
 }

@@ -2,10 +2,10 @@
 import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
 
-import { gameIntros } from '@/lib/GameIntros'
+import { gameIntros } from '@/utils/GameIntros'
 import { useModalStore } from '@/stores'
 
-import InfoModal from '@/components/gameInfo/InfoModal.vue'
+import InfoModal from '@/components/layout/gameInfo/InfoModal.vue'
 
 const route = useRoute()
 const showDialog = ref(false)

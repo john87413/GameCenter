@@ -1,6 +1,6 @@
 <script setup>
-import GameButton from '@/components/GameButton.vue'
-import AppTimer from '@/features/queens/controll/QueensTimer.vue'
+import GameButton from '@/components/common/GameButton.vue'
+import AppTimer from '@/components/queens/control/QueensTimer.vue'
 import { useQueensStore } from '@/stores'
 
 const queensStore = useQueensStore()

@@ -2,9 +2,9 @@
 import { computed } from 'vue'
 import { useSidebarStore } from '@/stores'
 
-import SidebarHeader from '@/components/sidebar/SidebarHeader.vue'
-import SidebarMenu from '@/components/sidebar/SidebarMenu.vue'
-import SidebarBottom from '@/components/sidebar/SidebarBottom.vue'
+import SidebarHeader from '@/components/layout/sidebar/SidebarHeader.vue'
+import SidebarMenu from '@/components/layout/sidebar/SidebarMenu.vue'
+import SidebarBottom from '@/components/layout/sidebar/SidebarBottom.vue'
 
 const sidebarStore = useSidebarStore()
 

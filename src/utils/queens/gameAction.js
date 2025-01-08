@@ -1,6 +1,6 @@
 
-import { easy, medium, hard } from '@/lib/queens/data/sectionGrid';
-import { cellColors } from '@/lib/queens/data/cellColors.js'
+import { easy, medium, hard } from '@/utils/queens/data/sectionGrid';
+import { cellColors } from '@/utils/queens/data/cellColors.js'
 
 // 取得隨機棋盤
 function getRandomSectionGrid() {

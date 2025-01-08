@@ -1,6 +1,8 @@
 <script setup>
 import { useRouter } from 'vue-router'
-import { gameIntros } from '@/lib/GameIntros'
+import { gameIntros } from '@/utils/GameIntros'
+
+import GameArea from '@/components/common/GameArea.vue'
 
 const router = useRouter()
 
@@ -10,26 +12,25 @@ const playGame = (game) => {
 </script>
 
 <template>
-  <div class="game-container">
-    <h1 class="header">Games On</h1>
-    <div class="game-card-container">
-      <div class="game-card" v-for="game in gameIntros" :key="game.id" @click="playGame(game)">
-        <img :src="game.cover" :alt="game.title" class="game-image" />
-        <div class="game-info">
-          <div class="game-title">{{ game.title }}</div>
-          <div class="game-description">{{ game.shortDesciption }}</div>
+  <GameArea>
+    <div class="game-container">
+      <h1 class="header">Games On</h1>
+      <div class="game-card-container">
+        <div class="game-card" v-for="game in gameIntros" :key="game.id" @click="playGame(game)">
+          <img :src="game.cover" :alt="game.title" class="game-image" />
+          <div class="game-info">
+            <div class="game-title">{{ game.title }}</div>
+            <div class="game-description">{{ game.shortDesciption }}</div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  </GameArea>
 </template>
 
 <style scoped>
 .game-container {
   padding: 1.3rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 }
 
 .header {

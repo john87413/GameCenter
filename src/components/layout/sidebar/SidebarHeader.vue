@@ -1,7 +1,14 @@
 <script setup>
+import { computed } from 'vue'
+
 import { useSidebarStore } from '@/stores'
 
 const sidebarStore = useSidebarStore()
+const isDimmed = computed(() => sidebarStore.isDimmed)
+
+const closeSidebar = () => {
+  if (isDimmed.value) sidebarStore.toggleSidebar(false)
+}
 
 const toggleSidebar = () => {
   sidebarStore.toggleSidebar()
@@ -10,7 +17,7 @@ const toggleSidebar = () => {
 
 <template>
   <header>
-    <RouterLink to="/" class="image-text">
+    <RouterLink to="/" class="image-text" @click="closeSidebar">
       <div class="image">
         <img src="@/assets/logo.svg" alt="logo" />
       </div>

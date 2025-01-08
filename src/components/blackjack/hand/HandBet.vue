@@ -1,7 +1,7 @@
 <script setup>
 import { computed } from 'vue'
-import HandCoin from '@/features/blackjack/hand/HandCoin.vue'
-import { results } from '@/lib/blackjack/data/result'
+import HandCoin from '@/components/blackjack/hand/HandCoin.vue'
+import { results } from '@/utils/blackjack/data/result'
 
 const { PUSH, BUST, BLACKJACK, WIN, LOSE } = results
 

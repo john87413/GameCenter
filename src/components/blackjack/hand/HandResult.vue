@@ -1,10 +1,10 @@
 <script setup>
 import { computed } from 'vue'
-import ResultBlackjack from '@/features/blackjack/result/ResultBlackjack.vue'
-import ResultBust from '@/features/blackjack/result/ResultBust.vue'
-import ResultLose from '@/features/blackjack/result/ResultLose.vue'
-import ResultPush from '@/features/blackjack/result/ResultPush.vue'
-import ResultWin from '@/features/blackjack/result/ResultWin.vue'
+import ResultBlackjack from '@/components/blackjack/result/ResultBlackjack.vue'
+import ResultBust from '@/components/blackjack/result/ResultBust.vue'
+import ResultLose from '@/components/blackjack/result/ResultLose.vue'
+import ResultPush from '@/components/blackjack/result/ResultPush.vue'
+import ResultWin from '@/components/blackjack/result/ResultWin.vue'
 
 const props = defineProps({
   result: {

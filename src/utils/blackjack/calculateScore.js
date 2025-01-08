@@ -6,13 +6,11 @@ const FACE_VALUES = {
     'A': 11
 }
 
-function score(cardsToTotal, getHighTotal = false) {
-    /* eslint-disable no-debugger */
-    if (!cardsToTotal) debugger
+function score(cardsToTotal) {
     let cards = cardsToTotal.map(makeAcesLow)
     let lowTotal = cards.reduce(sumCards, 0)
     let highTotal = makeOneAceHigh(cards).reduce(sumCards, 0)
-    if (highTotal <= 21 || getHighTotal) return highTotal
+    if (highTotal <= 21) return highTotal
     return lowTotal
 }
 

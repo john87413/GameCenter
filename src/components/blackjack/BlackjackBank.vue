@@ -1,7 +1,7 @@
 <script setup>
 import { ref, watch, computed } from 'vue'
 import { useBlackjackStore } from '@/stores'
-import HandCoin from '@/features/blackjack/hand/HandCoin.vue'
+import HandCoin from '@/components/blackjack/hand/HandCoin.vue'
 
 const blackjackStore = useBlackjackStore()
 const isIncreasing = ref(false)

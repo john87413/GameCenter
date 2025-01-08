@@ -3,8 +3,8 @@ import { computed } from 'vue'
 
 import { useQueensStore } from '@/stores'
 
-import GridCell from '@/features/queens/GridCell.vue'
-import WinMessage from '@/features/queens/WinMessage.vue'
+import GridCell from '@/components/queens/GridCell.vue'
+import WinMessage from '@/components/queens/WinMessage.vue'
 
 const queensStore = useQueensStore()
 

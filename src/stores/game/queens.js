@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import gameAction from '@/lib/queens/gameAction';
+import gameAction from '@/utils/queens/gameAction';
 
 let timerInterval = null;
 

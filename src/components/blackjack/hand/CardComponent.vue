@@ -1,6 +1,6 @@
 <script setup>
-import CardValue from '@/features/blackjack/hand/CardValue.vue'
-import CardSuit from '@/features/blackjack/hand/CardSuit.vue'
+import CardValue from '@/components/blackjack/hand/CardValue.vue'
+import CardSuit from '@/components/blackjack/hand/CardSuit.vue'
 
 defineProps({
   card: {

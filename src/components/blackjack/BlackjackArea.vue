@@ -1,11 +1,11 @@
 <script setup>
 import { computed } from 'vue'
 import { useBlackjackStore } from '@/stores'
-import { results } from '@/lib/blackjack/data/result'
-import CardComponent from '@/features/blackjack/hand/CardComponent.vue'
-import HandTotal from '@/features/blackjack/hand/HandTotal.vue'
-import HandBet from '@/features/blackjack/hand/HandBet.vue'
-import HandResult from '@/features/blackjack/hand/HandResult.vue'
+import { results } from '@/utils/blackjack/data/result'
+import CardComponent from '@/components/blackjack/hand/CardComponent.vue'
+import HandTotal from '@/components/blackjack/hand/HandTotal.vue'
+import HandBet from '@/components/blackjack/hand/HandBet.vue'
+import HandResult from '@/components/blackjack/hand/HandResult.vue'
 
 const props = defineProps({
   hand: {
@@ -67,16 +67,13 @@ const toResultString = (resultValue) => {
 }
 .game-hand.is-active,
 .game-hand.is-split.is-active {
-  max-width: 55%;
   transform: scale(1.3);
-  z-index: 100;
 }
 .game-hand.is-split {
   transition: scale 0s;
 }
 .game-hand.is-inactive {
-  opacity: 0.3;
-  transform: translateY(-4rem);
+  opacity: 0.5;
 }
 .cards {
   min-height: 6.2rem;

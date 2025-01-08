@@ -49,23 +49,23 @@ export const gameIntros = [
             "Crowns can’t touch each other, not even diagonally.",
         ],
     },
-    {
-        id: 3,
-        routeName: 'queens',
-        title: 'Queens',
-        shortDesciption:
-            'The goal of Queens is to have exactly one crown in each row, column, and color region.',
-        icon: queensIcon,
-        cover: queensCover,
-        modalGameplays: [
-            "Tap once to place an X, then tap again to place a crown.",
-            "Use X to mark where crowns cannot go."
-        ],
-        modalGameRules: [
-            "You can only have one crown per row.",
-            "You can only have one crown per column.",
-            "You can only have one crown per colored section.",
-            "Crowns can’t touch each other, not even diagonally.",
-        ],
-    },
+    // {
+    //     id: 2,
+    //     routeName: 'queens',
+    //     title: 'Queens',
+    //     shortDesciption:
+    //         'The goal of Queens is to have exactly one crown in each row, column, and color region.',
+    //     icon: queensIcon,
+    //     cover: queensCover,
+    //     modalGameplays: [
+    //         "Tap once to place an X, then tap again to place a crown.",
+    //         "Use X to mark where crowns cannot go."
+    //     ],
+    //     modalGameRules: [
+    //         "You can only have one crown per row.",
+    //         "You can only have one crown per column.",
+    //         "You can only have one crown per colored section.",
+    //         "Crowns can’t touch each other, not even diagonally.",
+    //     ],
+    // },
 ]

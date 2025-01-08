@@ -1,18 +1,17 @@
 <script setup>
 import { computed } from 'vue'
 import { useBlackjackStore } from '@/stores'
-import GameButton from '@/components/GameButton.vue'
-import BlackjackBank from '@/features/blackjack/BlackjackBank.vue'
+import GameButton from '@/components/common/GameButton.vue'
+import BlackjackBank from '@/components/blackjack/BlackjackBank.vue'
 
 // Access the store
 const blackjackStore = useBlackjackStore()
 
 // Computed properties
-const isDealing = computed(() => blackjackStore.isDealing)
 const activeHandIndex = computed(() => blackjackStore.activeHandIndex)
 const canSplit = computed(() => blackjackStore.canSplit)
 const canDoubleDown = computed(() => blackjackStore.canDoubleDown)
-const isPlayerTurn = computed(() => !isDealing.value && activeHandIndex.value > 0)
+const isPlayerTurn = computed(() => activeHandIndex.value > 0)
 
 // Methods
 const doubleDown = () => {

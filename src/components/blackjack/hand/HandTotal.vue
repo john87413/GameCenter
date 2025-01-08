@@ -1,7 +1,7 @@
 <script setup>
 import { computed } from 'vue'
 import { useBlackjackStore } from '@/stores'
-import calculateScore from '@/lib/blackjack/calculateScore.js'
+import calculateScore from '@/utils/blackjack/calculateScore.js'
 
 const props = defineProps({
   index: {
