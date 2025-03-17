@@ -3,13 +3,17 @@ import { computed } from 'vue'
 
 import { useSidebarStore } from '@/stores'
 
+// store
 const sidebarStore = useSidebarStore()
-const isDimmed = computed(() => sidebarStore.isDimmed)
+// 監聽螢幕寬度
+const isNarrowScreen = computed(() => sidebarStore.isNarrowScreen)
 
+// 關閉側邊欄，只在窄螢幕時執行關閉動作
 const closeSidebar = () => {
-  if (isDimmed.value) sidebarStore.toggleSidebar(false)
+  if (isNarrowScreen.value) sidebarStore.toggleSidebar(false)
 }
 
+// 切換側邊欄開關狀態
 const toggleSidebar = () => {
   sidebarStore.toggleSidebar()
 }
@@ -38,10 +42,12 @@ const toggleSidebar = () => {
     position: relative;
     padding: 0.7rem 1rem;
 
+    // Logo 和文字的外層容器
     .image-text {
       display: flex;
       align-items: center;
 
+      // Logo 圖片樣式
       .image {
         margin-right: 0.7rem;
         display: flex;
@@ -51,6 +57,7 @@ const toggleSidebar = () => {
         }
       }
 
+      // 文字區域樣式
       .header-text {
         display: flex;
         flex-direction: column;
@@ -65,6 +72,7 @@ const toggleSidebar = () => {
       }
     }
 
+    // 收合按鈕樣式
     .toggle {
       position: absolute;
       top: 50%;
@@ -83,6 +91,7 @@ const toggleSidebar = () => {
     }
   }
 
+  // 側邊欄收合時的按鈕樣式
   &.close {
     .toggle {
       transform: translateY(-50%);

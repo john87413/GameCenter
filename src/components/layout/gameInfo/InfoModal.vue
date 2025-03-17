@@ -9,6 +9,7 @@ const isStartGame = computed(() => modalStore.isStartGame)
 
 const toggleModal = () => {
   modalStore.toggleModal()
+  modalStore.startGame()
 }
 
 const startGame = () => {

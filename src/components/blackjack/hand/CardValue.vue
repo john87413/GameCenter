@@ -1,19 +1,21 @@
 <script setup>
 import { computed } from 'vue'
 
-// Define props
+// props
 const props = defineProps({
+  // 卡牌點數
   value: {
     type: [String, Number],
     required: true
   },
+  // 卡牌花色
   suit: {
     type: String,
     required: true
   }
 })
 
-// Compute suitColor based on suit prop
+// 判斷卡牌花色的顏色
 const suitColor = computed(() => {
   if (['C', 'S'].includes(props.suit)) return 'text-white'
   return 'text-red'
@@ -21,6 +23,7 @@ const suitColor = computed(() => {
 </script>
 <template>
   <div class="value">
+    <!-- SVG 符號定義區域，存放所有卡牌點數 -->
     <svg style="display: none">
       <symbol id="value-2" viewBox="0 0 43.62 33.72">
         <path
@@ -105,6 +108,7 @@ const suitColor = computed(() => {
         />
       </symbol>
     </svg>
+    <!-- 使用相應的 SVG 符號顯示點數 -->
     <svg fill="currentColor" :class="suitColor">
       <use :xlink:href="'#value-' + value"></use>
     </svg>

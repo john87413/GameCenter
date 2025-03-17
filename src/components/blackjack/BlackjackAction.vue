@@ -4,55 +4,52 @@ import { useBlackjackStore } from '@/stores'
 import GameButton from '@/components/common/GameButton.vue'
 import BlackjackBank from '@/components/blackjack/BlackjackBank.vue'
 
-// Access the store
+// store
 const blackjackStore = useBlackjackStore()
 
-// Computed properties
-const activeHandIndex = computed(() => blackjackStore.activeHandIndex)
+// 是否可以分牌
 const canSplit = computed(() => blackjackStore.canSplit)
+// 是否可以雙倍下注
 const canDoubleDown = computed(() => blackjackStore.canDoubleDown)
-const isPlayerTurn = computed(() => activeHandIndex.value > 0)
+// 是否可以進行操作
+const canPerformAction = computed(() => blackjackStore.canPerformAction)
 
-// Methods
+// 加倍下注
 const doubleDown = () => {
   blackjackStore.doubleDown()
 }
+// 分牌
 const split = () => {
   blackjackStore.callSplit()
 }
+// 停止要牌
 const stand = () => {
   blackjackStore.stand()
 }
+// 要牌
 const hit = () => {
   blackjackStore.hit({})
 }
 </script>
 
 <template>
-  <div class="controls-row">
-    <div class="controls">
-      <GameButton
-        @click="doubleDown"
-        text="DOUBLE DOWN"
-        :is-enabled="canDoubleDown && isPlayerTurn"
-      />
-      <GameButton @click="split" text="SPLIT" :is-enabled="canSplit && isPlayerTurn" />
-      <BlackjackBank />
-      <GameButton @click="stand" text="STAND" :is-enabled="isPlayerTurn" />
-      <GameButton @click="hit" text="HIT" :is-enabled="isPlayerTurn" />
-    </div>
+  <div class="controls">
+    <GameButton
+      @click="doubleDown"
+      text="DOUBLE DOWN"
+      :is-enabled="canDoubleDown && canPerformAction"
+    />
+    <GameButton @click="split" text="SPLIT" :is-enabled="canSplit && canPerformAction" />
+    <BlackjackBank />
+    <GameButton @click="stand" text="STAND" :is-enabled="canPerformAction" />
+    <GameButton @click="hit" text="HIT" :is-enabled="canPerformAction" />
   </div>
 </template>
 
-<style scoped>
-.controls-row {
-  text-align: center;
-}
+<style lang="scss" scoped>
+// 控制容器樣式
 .controls {
-  display: inline-flex;
-  flex-flow: row nowrap;
-  justify-content: space-between;
-  align-items: center;
+  display: flex;
   margin-bottom: 1rem;
 }
 </style>

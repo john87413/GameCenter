@@ -7,22 +7,28 @@ import { useSidebarStore } from '@/stores'
 import blackjackIcon from '@/assets/blackjack/blackjack.svg'
 import queensIcon from '@/assets/queens/queens.svg'
 
+// router
 const route = useRoute()
+// store
 const sidebarStore = useSidebarStore()
 
-const isDimmed = computed(() => sidebarStore.isDimmed)
+// 監聽螢幕寬度狀態
+const isNarrowScreen = computed(() => sidebarStore.isNarrowScreen)
+
+// 選單資料
 const menuItems = ref([
   { icon: blackjackIcon, name: 'Black Jack', route: '/blackjack' },
   { icon: queensIcon, name: 'Queens', route: '/queens' }
 ])
 
+// 判斷選單是否為當前活動頁面
 const isActive = (itemRoute) => {
   return route.path === itemRoute
 }
 
-// 關閉側邊欄
+// 關閉側邊欄函數（僅在窄螢幕時執行）
 const closeSidebar = () => {
-  if (isDimmed.value) sidebarStore.toggleSidebar(false)
+  if (isNarrowScreen.value) sidebarStore.toggleSidebar(false)
 }
 </script>
 
@@ -50,10 +56,12 @@ const closeSidebar = () => {
 <style lang="scss" scoped>
 .menu {
   .nav-link {
+    // 選單圖標
     img {
       width: 2.2rem;
     }
 
+    // 選中狀態
     &.active {
       background: var(--primary-color);
 

@@ -1,3 +1,6 @@
+const CARD_VALUES = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'] // 卡牌數值
+const CARD_SUITS = ['C', 'D', 'H', 'S'] // 卡牌花色
+
 // 創建指定數量的牌組
 function createShoe(deckCount = 1) {
     let shoe = []
@@ -9,10 +12,8 @@ function createShoe(deckCount = 1) {
 // 創建未打亂的牌組
 function createDeck() {
     let deck = []
-    const values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
-    const suits = ['C', 'D', 'H', 'S']
-    values.forEach(value => {
-        suits.forEach(suit => {
+    CARD_VALUES.forEach(value => {
+        CARD_SUITS.forEach(suit => {
             deck.push({ value, suit })
         })
     })

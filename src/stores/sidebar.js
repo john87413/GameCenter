@@ -4,7 +4,7 @@ export const useSidebarStore = defineStore('sidebar', {
     state: () => ({
         showSidebar: true,
         darkMode: false,
-        isDimmed: false
+        isNarrowScreen: false
     }),
     actions: {
         toggleSidebar(isShow) {
@@ -13,8 +13,8 @@ export const useSidebarStore = defineStore('sidebar', {
         toggleDarkMode(isDark) {
             this.darkMode = isDark === undefined ? !this.darkMode : isDark
         },
-        toggleDimmed(isDimmed) {
-            this.isDimmed = isDimmed === undefined ? !this.isDimmed : isDimmed
+        toggleNarrowScreen(isNarrowScreen) {
+            this.isNarrowScreen = isNarrowScreen === undefined ? !this.isNarrowScreen : isNarrowScreen
         }
     }
 })

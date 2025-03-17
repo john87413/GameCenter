@@ -27,6 +27,8 @@ export const useBlackjackStore = defineStore('blackjack', {
         shoe: [], // 牌堆
         hands: [], // 手牌[莊家,玩家]
         activeHandIndex: null, // 當前操作的手牌索引
+        isActionInProgress: false, // 追踪是否有動作正在進行中
+        isDoubleDown: false // 追踪是否雙倍下注
     }),
 
     getters: {
@@ -65,6 +67,13 @@ export const useBlackjackStore = defineStore('blackjack', {
             const cards = state.hands[state.activeHandIndex].cards;
             return cards.length === 2;
         },
+        // 檢查是否可以執行動作
+        canPerformAction(state) {
+            return !state.isActionInProgress
+                && state.activeHandIndex !== null
+                && state.activeHandIndex > 0
+                && !state.isDoubleDown;
+        },
         // 判斷遊戲是否結束
         // 1. 存在手牌
         // 2. 玩家籌碼小於最小下注額
@@ -92,10 +101,11 @@ export const useBlackjackStore = defineStore('blackjack', {
         // 重置回合
         // 重置手牌 -> 檢查是否需要洗牌 -> 下注 -> 發牌回合
         async resetRound() {
+            this.resetDoubleDown();
             this.resetHands();
             this.reshuffleIfNeeded();
-            this.bet();
-            await this.dealRound();
+            await this.bet();
+            this.dealRound();
         },
         // 重置牌堆，建立指定數量的新牌組並洗牌
         resetShoe() {
@@ -114,6 +124,10 @@ export const useBlackjackStore = defineStore('blackjack', {
         resetActiveHand() {
             this.activeHandIndex = null;
         },
+        // 重置雙倍下注
+        resetDoubleDown() {
+            this.isDoubleDown = false;
+        },
         // 檢查是否需要重新洗牌，當使用的牌數超過設定百分比時重新洗牌
         reshuffleIfNeeded() {
             const shoeUsedPercent = 1 - (this.shoe.length / (this.settings.deckCount * 52));
@@ -126,13 +140,13 @@ export const useBlackjackStore = defineStore('blackjack', {
 
         // 發牌回合
         // 按照順序給玩家和莊家發牌：玩家->莊家->玩家->莊家
-        async dealRound() {
+        dealRound() {
             if (!this.hands[1].bets[0]) return; // must have a bet to deal round
             const dealQueue = [1, 0, 1, 0]; // player, dealer, player, dealer
             for (let i = 0; i < dealQueue.length; i++) {
-                setTimeout(() => { this.deal(dealQueue[i]); }, DEFAULT_DELAY * (i + 2));
+                setTimeout(() => { this.deal(dealQueue[i]); }, DEFAULT_DELAY * (i + 1));
             }
-            setTimeout(() => { this.startRound(); }, DEFAULT_DELAY * 6);
+            setTimeout(() => { this.startRound(); }, DEFAULT_DELAY * 5);
         },
         // 發牌，從牌堆中抽一張牌給指定的手牌，處理莊家第一張牌面朝下的情況
         deal(handIndex) {
@@ -144,18 +158,18 @@ export const useBlackjackStore = defineStore('blackjack', {
         },
         // 開始回合
         // 檢查爆牌和黑傑克，決定是否結束回合或繼續遊戲
-        async startRound() {
+        startRound() {
             this.checkForBustsAndBlackjacks();
             if (this.hands.find(hand => hand.result)) {
                 this.revealDealerHand();
-                await this.endRound();
+                this.endRound();
             } else {
-                await this.startNextTurn();
+                this.startNextTurn();
             }
         },
         // 開始下一輪
         // 切換到下一個活動手牌，處理新分牌情況和莊家回合
-        async startNextTurn() {
+        startNextTurn() {
             this.advanceActiveHand();
             if (this.activeHand.cards.length === 1) { // a newly split hand
                 let onlyOnce = this.activeHand.cards[0].value === 'A';
@@ -188,7 +202,7 @@ export const useBlackjackStore = defineStore('blackjack', {
         },
         // 結束當前回合
         // 根據是否還有其他手牌決定是否繼續遊戲或結束回合
-        async endTurn() {
+        endTurn() {
             if (this.activeHandIndex > 0) {
                 this.startNextTurn();
             } else {
@@ -197,37 +211,53 @@ export const useBlackjackStore = defineStore('blackjack', {
         },
         // 結束這一局遊戲
         // 重置活動手牌 -> 比較手牌 -> 結算手牌 -> 收集贏得的籌碼 -> 重置回合
-        async endRound() {
+        endRound() {
             this.resetActiveHand();
             this.compareHands();
-            setTimeout(() => { this.settleHands(); }, DEFAULT_DELAY * 1.5);
-            setTimeout(() => { this.collectWinnings(); }, DEFAULT_DELAY * 3.5);
-            setTimeout(() => { this.resetRound(); }, DEFAULT_DELAY * 4);
+            setTimeout(() => { this.settleHands(); }, DEFAULT_DELAY * 1.8);
+            setTimeout(() => { this.collectWinnings(); }, DEFAULT_DELAY * 2.8);
+            setTimeout(() => { this.resetRound(); }, DEFAULT_DELAY * 3);
         },
 
         // 3. 玩家操作
 
+        // 設置動作狀態
+        setActionInProgress(status) {
+            this.isActionInProgress = status;
+        },
+
         // 下注
         // 從玩家籌碼中扣除最小下注額，並加入到當前手牌的下注中
-        bet() {
+        async bet() {
             if (this.bank < this.settings.minimumBet) return;
+            // 使用 setTimeout 來確保 DOM 已更新並準備好進行動畫
+            await new Promise(resolve => setTimeout(resolve, 0));
             this.bank -= this.settings.minimumBet;
             const bets = [this.settings.minimumBet];
             this.hands[1].bets = bets.slice();
         },
         // 要牌，給當前手牌發一張牌，檢查結果並決定下一步
         // {onlyOnce: 是否只要一次牌, isDealer: 是否為莊家}
-        async hit({ onlyOnce = false, isDealer = false }) {
+        hit({ onlyOnce = false, isDealer = false }) {
+            if (!isDealer && this.isActionInProgress) return;
+            this.setActionInProgress(true);
             this.deal(this.activeHandIndex);
             setTimeout(() => {
                 this.checkForBustsAndBlackjacks();
-                if (this.activeHand.result || onlyOnce) return this.endTurn();
-                if (calculateScore.score(this.activeHand.cards) === 21) return this.endTurn();
-                if (isDealer) this.makeDealerDecision();
+                if (this.activeHand.result || onlyOnce) {
+                    this.endTurn();
+                } else if (calculateScore.score(this.activeHand.cards) === 21) {
+                    this.endTurn();
+                } else if (isDealer) {
+                    this.makeDealerDecision();
+                }
+                this.setActionInProgress(false);
             }, DEFAULT_DELAY);
         },
         // 雙倍下注，加倍下注後只能再要一張牌
-        async doubleDown() {
+        doubleDown() {
+            if (this.isActionInProgress) return;
+            this.isDoubleDown = true;
             this.doubleBet();
             setTimeout(() => { this.hit({ onlyOnce: true }); }, DEFAULT_DELAY);
         },
@@ -238,14 +268,15 @@ export const useBlackjackStore = defineStore('blackjack', {
             bets[1] = bets[0];
             this.hands[this.activeHandIndex].bets = bets.slice();
         },
-        async callSplit() {
+        // 處理分牌請求的整體流程
+        callSplit() {
             this.split();
             this.resetActiveHand();
             setTimeout(() => {
                 this.startNextTurn();
             }, DEFAULT_DELAY * 2);
         },
-        // 分牌，將一對相同點數的牌分成兩手牌分別遊戲
+        // 分牌的具體邏輯，將一對相同點數的牌分成兩手牌分別遊戲
         split() {
             const hands = this.hands.slice();
             hands[2] = clone(BASE_HAND);

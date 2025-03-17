@@ -8,7 +8,7 @@
 .win-message {
   font-size: 1rem;
   font-weight: 500;
-  margin: 10px 0;
+  margin-top: 0.7rem;
   color: var(--primary-color);
 }
 </style>

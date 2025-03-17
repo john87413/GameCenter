@@ -3,6 +3,7 @@ import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 const showAnimation = ref(false)
+const isAnimationComplete = ref(false)
 const route = useRoute()
 const router = useRouter()
 
@@ -13,30 +14,36 @@ onMounted(async () => {
     document.body.style.overflow = 'hidden'
     setTimeout(() => {
       showAnimation.value = false
-      document.body.style.overflow = 'auto'
     }, 4000)
-  } else {
-    showAnimation.value = false
   }
 })
+
+const onTransitionEnd = () => {
+  if (!showAnimation.value) {
+    isAnimationComplete.value = true
+    document.body.style.overflow = 'auto'
+  }
+}
 </script>
 
 <template>
-  <div class="opening-animation" v-if="showAnimation">
-    <div class="animation-container">
-      <div class="game-elements">
-        <div class="element dice"></div>
-        <div class="element card"></div>
-        <div class="element chip"></div>
-      </div>
-      <div class="logo-container">
-        <h1 class="game-on">
-          <span>G</span><span>a</span><span>m</span><span>e</span> <span>O</span><span>n</span>
-        </h1>
-        <h2 class="fun-never-ends">Fun Never Ends</h2>
+  <Transition name="fade" :duration="{ enter: 0, leave: 1000 }" @after-leave="onTransitionEnd">
+    <div class="opening-animation" v-show="showAnimation && !isAnimationComplete">
+      <div class="animation-container">
+        <div class="game-elements">
+          <div class="element dice"></div>
+          <div class="element card"></div>
+          <div class="element chip"></div>
+        </div>
+        <div class="logo-container">
+          <h1 class="game-on">
+            <span>G</span><span>a</span><span>m</span><span>e</span> <span>O</span><span>n</span>
+          </h1>
+          <h2 class="fun-never-ends">Fun Never Ends</h2>
+        </div>
       </div>
     </div>
-  </div>
+  </Transition>
 </template>
 
 <style lang="scss" scoped>
@@ -52,7 +59,6 @@ onMounted(async () => {
   background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
   z-index: 9999;
   overflow: hidden;
-  animation: fadeOut 0.5s ease-in-out 5.5s forwards;
 
   .animation-container {
     position: relative;
@@ -147,6 +153,16 @@ onMounted(async () => {
   }
 }
 
+// 只保留離開動畫
+.fade-leave-active {
+  transition: all 1s ease-in-out;
+}
+
+.fade-leave-to {
+  opacity: 0;
+  transform: scale(1.1);
+}
+
 @keyframes floatElement {
   0%,
   100% {
@@ -193,14 +209,8 @@ onMounted(async () => {
   }
 }
 
-@keyframes fadeOut {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-    visibility: hidden;
-  }
+.element.exit {
+  animation: exitAnimation 0.5s forwards;
 }
 
 @keyframes exitAnimation {
@@ -216,9 +226,5 @@ onMounted(async () => {
     transform: translateY(-100%) scale(1.5);
     opacity: 0;
   }
-}
-
-.element.exit {
-  animation: exitAnimation 0.5s forwards;
 }
 </style>

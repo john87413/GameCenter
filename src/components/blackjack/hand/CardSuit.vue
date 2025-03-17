@@ -1,7 +1,9 @@
 <script setup>
 import { computed } from 'vue'
 
+// props
 const props = defineProps({
+  // 花色
   suit: {
     type: String,
     required: true
@@ -21,6 +23,7 @@ const suitName = computed(() => {
 
 <template>
   <div class="suit">
+    <!-- SVG 符號定義區，存放所有花色的 SVG 路徑 -->
     <svg style="display: none">
       <symbol id="suit-clubs" viewBox="0 0 45.33 50.5" fill="currentColor" class="text-white">
         <circle cx="32.49" cy="29.52" r="11.69" opacity="0.5" />
@@ -44,6 +47,7 @@ const suitName = computed(() => {
         <polygon points="22.33 38.65 15.69 50 28.97 50 22.33 38.65" opacity="0.5" />
       </symbol>
     </svg>
+    <!-- 使用相應的 SVG 符號顯示花色 -->
     <svg>
       <use :xlink:href="'#suit-' + suitName"></use>
     </svg>

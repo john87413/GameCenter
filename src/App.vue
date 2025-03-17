@@ -6,24 +6,26 @@ import InfoComponent from '@/components/layout/gameInfo/InfoComponent.vue'
 import GameAnimation from '@/components/common/GameAnimation.vue'
 
 const SIDEBAR_BREAKPOINT = 992 // 側邊欄響應式斷點
+let ticking = false
 
-// 初始化 sidebar store 和相關狀態
+// store
 const sidebarStore = useSidebarStore()
+
+// 是否顯示側邊欄
 const showSidebar = computed(() => sidebarStore.showSidebar)
 
 // 檢查並處理側邊欄的響應式效果(遮罩 & 關閉側邊欄)
 const checkSidebarResponsive = () => {
   const isNarrowScreen = window.innerWidth < SIDEBAR_BREAKPOINT
-  sidebarStore.toggleDimmed(isNarrowScreen)
+  sidebarStore.toggleNarrowScreen(isNarrowScreen)
 
   if (isNarrowScreen && showSidebar.value) {
     sidebarStore.toggleSidebar(false)
   }
 }
 
-// 使用 requestAnimationFrame 來限制更新頻率
-// ticking 變數確保在一個動畫幀內只執行一次更新
-let ticking = false
+// ticking 確保在一個動畫幀內只執行一次更新
+// requestAnimationFrame 限制更新頻率
 const handleResize = () => {
   if (!ticking) {
     window.requestAnimationFrame(() => {

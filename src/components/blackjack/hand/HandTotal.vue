@@ -1,8 +1,11 @@
 <script setup>
 import { computed } from 'vue'
+
 import { useBlackjackStore } from '@/stores'
+
 import calculateScore from '@/utils/blackjack/calculateScore.js'
 
+// props
 const props = defineProps({
   index: {
     type: Number,
@@ -10,12 +13,14 @@ const props = defineProps({
   }
 })
 
+// store
 const store = useBlackjackStore()
 
+// 計算手牌總點數
 const total = computed(() => {
   const hand = store.hands[props.index]
-  if (hand.cards.length < 2) return
-  if (hand.cards.find((card) => card.isFaceDown)) return
+  if (hand.cards.length < 2) return // 手牌至少有兩張牌才能計算
+  if (hand.cards.find((card) => card.isFaceDown)) return // 沒有面朝下的牌（莊家）才能計算
   return calculateScore.score(hand.cards)
 })
 </script>
@@ -29,6 +34,7 @@ const total = computed(() => {
 </template>
 
 <style lang="scss" scoped>
+// 點數基本樣式
 .hand-total {
   display: inline-block;
   position: absolute;
@@ -44,18 +50,20 @@ const total = computed(() => {
   text-align: center;
   color: var(--menu-text-color);
 }
+// 爆牌顏色
 .bust {
   background: #e04030;
 }
+// 21點顏色
 .twenty-one {
   background: #e1ae0f;
 }
-.pop-enter-active {
+// 進入&離開過渡
+.pop-enter-active,
+.pop-leave-active {
   transition: var(--tran-03);
 }
-.pop-leave-active {
-  transition: var(--tran-02);
-}
+// 動畫樣式
 .pop-enter-from,
 .pop-leave-to {
   transform: scale(0) rotate(360deg);
