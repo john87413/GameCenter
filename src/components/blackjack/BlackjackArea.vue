@@ -105,4 +105,10 @@ const handClasses = computed(() => {
     transform: translateY(0);
   }
 }
+
+@media (max-width: 576px) {
+  .cards {
+    max-width: 17rem;
+  }
+}
 </style>

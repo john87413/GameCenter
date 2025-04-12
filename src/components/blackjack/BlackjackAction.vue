@@ -34,15 +34,19 @@ const hit = () => {
 
 <template>
   <div class="controls">
-    <GameButton
-      @click="doubleDown"
-      text="DOUBLE DOWN"
-      :is-enabled="canDoubleDown && canPerformAction"
-    />
-    <GameButton @click="split" text="SPLIT" :is-enabled="canSplit && canPerformAction" />
+    <div class="button-group">
+      <GameButton
+        @click="doubleDown"
+        text="DOUBLE DOWN"
+        :is-enabled="canDoubleDown && canPerformAction"
+      />
+      <GameButton @click="split" text="SPLIT" :is-enabled="canSplit && canPerformAction" />
+    </div>
     <BlackjackBank />
-    <GameButton @click="stand" text="STAND" :is-enabled="canPerformAction" />
-    <GameButton @click="hit" text="HIT" :is-enabled="canPerformAction" />
+    <div class="button-group">
+      <GameButton @click="stand" text="STAND" :is-enabled="canPerformAction" />
+      <GameButton @click="hit" text="HIT" :is-enabled="canPerformAction" />
+    </div>
   </div>
 </template>
 
@@ -51,5 +55,24 @@ const hit = () => {
 .controls {
   display: flex;
   margin-bottom: 1rem;
+}
+
+// 按鈕組樣式
+.button-group {
+  display: flex;
+}
+
+@media (max-width: 768px) {
+  .controls {
+    align-items: center;
+    .button-group {
+      flex-direction: column;
+      padding: 0 0.5rem;
+      .game-button {
+        height: 3.5rem;
+        margin: 0.3rem 0;
+      }
+    }
+  }
 }
 </style>

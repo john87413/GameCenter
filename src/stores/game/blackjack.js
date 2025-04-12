@@ -214,9 +214,9 @@ export const useBlackjackStore = defineStore('blackjack', {
         endRound() {
             this.resetActiveHand();
             this.compareHands();
-            setTimeout(() => { this.settleHands(); }, DEFAULT_DELAY * 1.8);
-            setTimeout(() => { this.collectWinnings(); }, DEFAULT_DELAY * 2.8);
-            setTimeout(() => { this.resetRound(); }, DEFAULT_DELAY * 3);
+            setTimeout(() => { this.settleHands(); }, DEFAULT_DELAY * 0.6);
+            setTimeout(() => { this.collectWinnings(); }, DEFAULT_DELAY * 1.8);
+            setTimeout(() => { this.resetRound(); }, DEFAULT_DELAY * 2.3);
         },
 
         // 3. 玩家操作

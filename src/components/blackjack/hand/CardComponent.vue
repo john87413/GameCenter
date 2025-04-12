@@ -33,7 +33,6 @@ defineProps({
 // 卡牌基本樣式
 .card {
   position: relative;
-  // display: inline-block;
   width: 4rem;
   height: 6rem;
   margin: 0.1rem;

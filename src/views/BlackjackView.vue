@@ -48,7 +48,7 @@ watch(isStartGame, () => {
 
 <style lang="scss" scoped>
 .dealer-side {
-  margin-top: 1rem;
+  margin-top: 5rem;
 }
 .player-side {
   width: 100%;
@@ -56,5 +56,15 @@ watch(isStartGame, () => {
   justify-content: space-around;
   align-items: center;
   flex: 1;
+}
+
+@media (max-width: 768px) {
+  .player-side {
+    flex-direction: column;
+    justify-content: center;
+    .game-hand {
+      margin: 2.5rem 0;
+    }
+  }
 }
 </style>
