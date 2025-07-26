@@ -11,6 +11,13 @@ export const useQueensStore = defineStore('queens', {
     boardState: [], // 遊戲當前狀態
     queens: [], // 已放置的皇后位置集合
     time: 0, // 遊戲計時(秒)
+
+    conflicts: {
+      rowCounts: {},       // 每行的皇后數量
+      colCounts: {},       // 每列的皇后數量
+      sectionCounts: {},   // 每區塊的皇后數量
+      occupiedCells: new Set()
+    }
   }),
 
   getters: {
@@ -47,6 +54,45 @@ export const useQueensStore = defineStore('queens', {
       );
     },
 
+    // 添加皇后到所有追蹤物件
+    addQueenToConflicts(row, col) {
+      const section = this.boardState[row][col].section;
+
+      // 更新計數
+      this.conflicts.rowCounts[row] = (this.conflicts.rowCounts[row] || 0) + 1;
+      this.conflicts.colCounts[col] = (this.conflicts.colCounts[col] || 0) + 1;
+      this.conflicts.sectionCounts[section] = (this.conflicts.sectionCounts[section] || 0) + 1;
+
+      // 標記格子為佔用
+      this.conflicts.occupiedCells.add(gameAction.getCellKey(row, col));
+    },
+
+    // 從所有追蹤物件中移除皇后
+    removeQueenFromConflicts(row, col) {
+      const section = this.boardState[row][col].section;
+
+      // 更新計數
+      this.conflicts.rowCounts[row] = Math.max(0, (this.conflicts.rowCounts[row] || 0) - 1);
+      this.conflicts.colCounts[col] = Math.max(0, (this.conflicts.colCounts[col] || 0) - 1);
+      this.conflicts.sectionCounts[section] = Math.max(0, (this.conflicts.sectionCounts[section] || 0) - 1);
+
+      // 移除格子佔用標記
+      this.conflicts.occupiedCells.delete(gameAction.getCellKey(row, col));
+    },
+
+    // 檢查單個皇后是否有效
+    isQueenValid(row, col) {
+      const section = this.boardState[row][col].section;
+      return gameAction.isQueenValidWithCounts(row, col, section, this.conflicts);
+    },
+
+    // 更新所有皇后的有效性
+    updateAllQueensValidation() {
+      this.queens.forEach(queen => {
+        queen.valid = this.isQueenValid(queen.row, queen.col);
+      });
+    },
+
     // 切換區塊內容
     // 點擊循環: 空 -> 標記 -> 皇后 -> 空
     // 同時維護 queens 陣列和進行驗證
@@ -55,35 +101,28 @@ export const useQueensStore = defineStore('queens', {
 
       if (!cell.content) {
         cell.content = 'marked';
+
       } else if (cell.content === 'marked') {
         cell.content = 'queen';
-        this.queens.push({ row: rowIndex, col: cellIndex, valid: true });
+        const newQueen = { row: rowIndex, col: cellIndex, valid: true };
+        this.queens.push(newQueen);
+
+        // 加入所有追蹤物件
+        this.addQueenToConflicts(rowIndex, cellIndex);
+        // 驗證所有皇后的有效性
+        this.updateAllQueensValidation();
+
       } else {
+        cell.content = null;
         this.queens = this.queens.filter(
           (queen) => queen.row !== rowIndex || queen.col !== cellIndex
         );
-        cell.content = null;
+
+        // 從所有追蹤物件中移除
+        this.removeQueenFromConflicts(rowIndex, cellIndex);
+        // 驗證所有皇后的有效性
+        this.updateAllQueensValidation();
       }
-
-      this.validateBoard();
-    },
-
-    // 驗證整個棋盤狀態
-    // 檢查每個皇后的位置是否符合規則:
-    // 1.同一行只能有一個皇后
-    // 2.同一列只能有一個皇后
-    // 3.同一區塊只能有一個皇后 
-    // 4.斜線檢查是否有衝突
-    validateBoard() {
-      this.queens.forEach((queen) => {
-        const { row, col } = queen;
-        const cell = this.boardState[row][col];
-        const rowValid = gameAction.validateRow(this.queens, row);
-        const columnValid = gameAction.validateColumn(this.queens, col);
-        const sectionValid = gameAction.validateSection(this.boardState, this.queens, cell.section);
-        const diagonalValid = gameAction.checkDiagonalConflicts(this.boardState, this.queens, queen);
-        queen.valid = rowValid && columnValid && sectionValid && diagonalValid;
-      });
     },
 
     // 清空遊戲板
@@ -93,6 +132,12 @@ export const useQueensStore = defineStore('queens', {
         row.map((cell) => ({ ...cell, content: null }))
       );
       this.queens = [];
+
+      // 清空所有追蹤物件
+      this.conflicts.rowCounts = {};
+      this.conflicts.colCounts = {};
+      this.conflicts.sectionCounts = {};
+      this.conflicts.occupiedCells.clear();
     },
 
     // 開始計時器

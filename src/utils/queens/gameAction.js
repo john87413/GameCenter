@@ -22,58 +22,37 @@ function getRandomSectionGridColors() {
     return newCellColors;
 }
 
-// 驗證特定行是否有衝突
-function validateRow(queens, rowIndex) {
-    // 計算在該行中的皇后數量
-    const queensInRow = queens.filter((queen) => queen.row === rowIndex);
-    return queensInRow.length <= 1;
+function isQueenValidWithCounts(row, col, section, conflicts) {
+    // 檢查行、列、區塊和緊鄰對角線
+    return (conflicts.rowCounts[row] || 0) <= 1 &&
+        (conflicts.colCounts[col] || 0) <= 1 &&
+        (conflicts.sectionCounts[section] || 0) <= 1 &&
+        !hasAdjacentDiagonalConflict(row, col, conflicts.occupiedCells);
 }
 
-// 驗證特定列是否有衝突
-function validateColumn(queens, columnIndex) {
-    // 計算在該列中的皇后數量
-    const queensInColumn = queens.filter((queen) => queen.col === columnIndex);
-    return queensInColumn.length <= 1;
-}
-
-// 驗證特定區塊是否有衝突
-function validateSection(boardState, queens, section) {
-    // 計算在該區塊中的皇后數量
-    const queensInSection = queens.filter((queen) => {
-        const { row, col } = queen;
-        return boardState[row][col].section === section;
-    });
-    return queensInSection.length <= 1;
-}
-
-// 檢查是否有對角線衝突
-function checkDiagonalConflicts(boardState, queens, queen) {
-    // 定義四個對角線方向：左上、右上、左下、右下
-    const directions = [
-        [-1, -1],
-        [-1, 1],
-        [1, -1],
-        [1, 1],
-    ];
+// 檢查緊鄰對角線是否有衝突
+function hasAdjacentDiagonalConflict(row, col, occupiedCells) {
+    // 四個對角方向
+    const directions = [[-1, -1], [-1, 1], [1, -1], [1, 1]];
 
     for (const [dx, dy] of directions) {
-        const newRow = queen.row + dx;
-        const newCol = queen.col + dy;
+        const newRow = row + dx;
+        const newCol = col + dy;
 
-        // 檢查此位置是否在棋盤範圍內
-        if (
-            newRow >= 0 &&
-            newRow < boardState.length &&
-            newCol >= 0 &&
-            newCol < boardState[0].length
-        ) {
-            // 檢查對角線位置是否有其他皇后
-            if (queens.some((q) => q.row === newRow && q.col === newCol)) {
-                return false;
+        // 檢查範圍
+        if (newRow >= 0 && newRow < 8 && newCol >= 0 && newCol < 8) {
+            // 檢查該位置是否有皇后
+            if (occupiedCells.has(`${newRow},${newCol}`)) {
+                return true;
             }
         }
     }
-    return true;
+    return false;
 }
 
-export default { getRandomSectionGrid, getRandomSectionGridColors, validateRow, validateColumn, validateSection, checkDiagonalConflicts }
+// 生成格子的位址
+function getCellKey(row, col) {
+    return `${row},${col}`;
+}
+
+export default { getRandomSectionGrid, getRandomSectionGridColors, isQueenValidWithCounts, hasAdjacentDiagonalConflict, getCellKey }
